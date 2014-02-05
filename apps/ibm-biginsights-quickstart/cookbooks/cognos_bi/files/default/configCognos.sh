@@ -2,7 +2,7 @@
 #
 #  Licensed Materials - Property of IBM
 #
-#  IBM Cognos Products: DOCS
+#  IBM Cognos Products:  DOCS
 #
 #  (C) Copyright IBM Corp. 2005, 2010
 #

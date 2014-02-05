@@ -9,7 +9,7 @@
 ##############################################################################
 
 #
-# Inputs
+#  Inputs
 #
 echo '$BSWC_INSTALL_PATH:   '${BSWC_INSTALL_PATH}   # /opt/ibm/dsserver
 echo '$BSWC_CONFIG_PREFIX:  '${BSWC_CONFIG_PREFIX}  # /mnt/blumeta0/dsserver

@@ -1,6 +1,6 @@
 #!/bin/sh
 # Set the systems authentication to SHA-512
-echo "using $1"
+echo " using $1"
 
 # Set the systems authentication to SHA-512
 authconfig --passalgo=sha512 --update

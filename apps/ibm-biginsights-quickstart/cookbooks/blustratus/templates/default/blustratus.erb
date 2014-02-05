@@ -1,0 +1,86 @@
+#!/bin/bash
+# chkconfig: 2345 95 5
+# blustratus          Start BLU Stratus
+#
+# description: Start BLU Stratus
+# processname: blustratus
+
+### BEGIN INIT INFO
+# Provides: blustratus
+# Short-Description: Start BLU Stratus
+# Description:       This starts BLU Stratus
+#
+### END INIT INFO
+
+# source function library
+. /etc/rc.d/init.d/functions
+
+. /etc/bashrc
+
+runlevel=$(set -- $(runlevel); eval "echo \$$#" )
+
+export JAVA_HOME=<%= node[:cognos][:java_home] %>
+
+start()
+{
+    # Start OpenLDAP
+    service slapd start
+    # Even though the service invocation returns, slapd isn't quite ready to
+    # rock yet. Take a nap.
+    sleep 60
+
+    # Start DB2 and DAS
+    su - <%= node[:db2][:das][:username] %> -c "db2admin start"
+    su - <%= node[:db2][:instance][:username] %> -c "db2start"
+
+    # Start Apache
+    service httpd start
+
+    # Start Cognos
+    <%= node[:cognos][:install_path] %>/bin64/cogconfig.sh -s
+
+    # Start BLU Web Console
+    su - <%= node[:db2][:instance][:username] %> -c "cd <%= node[:console][:install][:path] %> && bin/start.sh"
+
+    return 0
+}
+
+stop()
+{
+    # Stop BLU Web Console
+    su - <%= node[:db2][:instance][:username] %> -c "cd <%= node[:console][:install][:path] %> && bin/stop.sh"
+
+    # Stop Cognos
+    <%= node[:cognos][:install_path] %>/bin64/cogconfig.sh -stop
+
+    # Stop Apache
+    service httpd stop
+
+    # Stop DB2 and DAS
+    su - <%= node[:db2][:instance][:username] %> -c "db2stop force"
+    su - <%= node[:db2][:das][:username] %> -c "db2admin stop"
+
+    # Stop OpenLDAP
+    service slapd stop
+}
+
+restart() {
+    stop
+    start
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    restart)
+        restart
+        ;;
+    *)
+        echo $"Usage: $0 {start|stop|restart}"
+        RETVAL=2
+esac
+exit $RETVAL

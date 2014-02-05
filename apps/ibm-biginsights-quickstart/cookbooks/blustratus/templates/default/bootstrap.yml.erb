@@ -1,0 +1,29 @@
+:console:
+  :install:
+    :path: <%= node[:console][:install][:path] %>
+  :port:       <%= node[:console][:port] %>
+  :user:       <%= node[:db2][:instance][:username] %>
+  :password:   <%= node[:db2][:instance][:password] %>
+
+:db2:
+  :port: <%= node[:db2][:port] %>
+  :instance:
+    :username: <%= node[:db2][:instance][:username] %>
+    :password: <%= node[:db2][:instance][:password] %>
+    :home_dir: <%= node[:db2][:instance][:home_dir] %>
+  :fenced:
+    :username: <%= node[:db2][:fenced][:username] %>
+  :das:
+    :username: <%= node[:db2][:das][:username] %>
+
+:cognos:
+  :install_path: <%= node[:cognos][:install_path] %>
+  :report_server:
+    :arch: <%= node[:cognos][:report_server][:arch] %>
+  :caf:
+    :enabled: <%= node[:cognos][:caf][:enabled] %>
+  :java_home: <%= node[:cognos][:java_home] %>
+
+:ldap:
+  :port:     <%= node[:ldap][:port] %>
+  :password: <%= node[:ldap][:password] %>

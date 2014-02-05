@@ -21,7 +21,8 @@ service {
     numInstances 1
 
     compute {
-        template "LARGE_RH"
+        //template "LARGE_RH"
+        template "MEDIUM_UBUNTU"
     }
 
     lifecycle {
@@ -51,15 +52,9 @@ service {
 	
         startDetectionTimeoutSecs 1240
         startDetection {
+			println "startDetection checking port ${nameNodePort}..."+ServiceUtils.isPortOccupied(nameNodePort)
 			ServiceUtils.isPortOccupied(nameNodePort)
         }
 		
-		/*locator {	
-			def sigarQuery = "State.Name.eq=java,Args.*.ew=${nameNodeJmxPort}"
-			println "biginsights-qs-service(locator): Sigar query is ${sigarQuery}"
-			def myPids = ServiceUtils.ProcessUtils.getPidsWithQuery(sigarQuery)			
-			println "biginsights-qs-service(locator): Current PIDs are ${myPids}"
-			return myPids
-        } */
     }
 }

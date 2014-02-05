@@ -29,6 +29,7 @@ class ChefBootstrap {
     def opscode_gpg_key_url = "http://apt.opscode.com/packages@opscode.com.gpg.key"
 
     public def static getBootstrap(options=[:]) {
+		println "In getBootstrap ..."
         def os = OperatingSystem.getInstance()
         def cls
         switch (os.getVendor()) {
@@ -42,10 +43,12 @@ class ChefBootstrap {
                 }
             default: throw new Exception("Support for the OS ${os.getVendor()} is not implemented")
         }
+		println "End of getBootstrap"
         return cls
     }
 
     protected def ChefBootstrap(options=[:]) {
+		println "In ChefBootstrap..."
         os = OperatingSystem.getInstance()
         if ("context" in options) {
             context = options["context"]
@@ -62,6 +65,7 @@ class ChefBootstrap {
         chefConfig = chefProperties.chef.flatten() + chefConfig + options.findAll(){ it.key != "context" }
         // persist to context attributes
         context.attributes.thisInstance["chefConfig"] = chefConfig
+		println "End of ChefBootstrap"
     }
     protected def installRuby() {
         if (this.class.methods.find { it.name == "install_pkgs"}) {
@@ -215,10 +219,12 @@ cookbook_path "${cookbooksPath}"
         }
     }
     protected runListToInitialJson(ArrayList runList) {
+		println "In runListToInitialJson"
         def initJson = [:]
         if (!runList.isEmpty()) {
             initJson["run_list"] = runList
         }
+		println "End of runListToInitialJson"
         return initJson
     }
     protected def fatBinaryInstall() {
@@ -342,6 +348,7 @@ deb http://apt.opscode.com/ ${os.getVendorCodeName().toLowerCase()}-0.10 main
         sudo("apt-get update")
         sudo("""echo "chef chef/chef_server_url string ${chefConfig.serverURL}" | sudo debconf-set-selections""")
         install_pkgs(["opscode-keyring", "chef"])
+		println "End of pkgInstall"
     }
 }
 

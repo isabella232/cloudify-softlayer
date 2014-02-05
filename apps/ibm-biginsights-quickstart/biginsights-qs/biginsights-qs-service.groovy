@@ -28,18 +28,21 @@ service {
 		
 		details {
 			def currPublicIP = context.publicAddress
-			def biginsightsURL = "https://${currPublicIP}:9443"
+			def biginsightsURL = "https://${currPublicIP}:${httpPort}"
+			def biginsightsDfsHealthURL = "https://${currPublicIP}:${nameNodePort}"
 			def biginsightsUser = "biadmin"
 			def biginsightsPass = "biadmin"
 			
 			
 			println "biginsights-service.groovy: biginsightsURL is ${biginsightsURL}"
+			println "biginsights-service.groovy: biginsightsDfsHealthURL is ${biginsightsDfsHealthURL}"
 			println "biginsights-service.groovy: biginsightsUser is ${biginsightsUser}"
 			println "biginsights-service.groovy: biginsightsPass is ${biginsightsPass}"
 			
 			
 			return [
-				"biginsightsURL":"<a href=\"${biginsightsURL}\" target=\"_blank\">${biginsightsURL}</a>" ,
+				"biginsights URL":"<a href=\"${biginsightsURL}\" target=\"_blank\">${biginsightsURL}</a>" ,
+				"biginsights DFS Health URL":"<a href=\"${biginsightsDfsHealthURL}\" target=\"_blank\">${biginsightsDfsHealthURL}</a>" ,
 				"biginsightsUser":"${biginsightsUser}" , 
 				"biginsightsPass":"${biginsightsPass}" ,
 			]
@@ -48,7 +51,15 @@ service {
 	
         startDetectionTimeoutSecs 1240
         startDetection {
-            ServiceUtils.isPortOccupied(System.getenv()["CLOUDIFY_AGENT_ENV_PRIVATE_IP"], 389)
+			ServiceUtils.isPortOccupied(nameNodePort)
+        }
+		
+		locator {	
+			def sigarQuery = "State.Name.eq=java,Args.*.ew=${nameNodeJmxPort}"
+			println "biginsights-qs-service(locator): Sigar query is ${sigarQuery}"
+			def myPids = ServiceUtils.ProcessUtils.getPidsWithQuery(sigarQuery)			
+			println "biginsights-qs-service(locator): Current PIDs are ${myPids}"
+			return myPids
         }
     }
 }

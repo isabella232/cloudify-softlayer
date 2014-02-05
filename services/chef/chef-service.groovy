@@ -63,6 +63,7 @@ service {
                     validationCert: validationCert,
                     context: context
             ).runClient(runParamsLocal)
+            println "End of service start"
             return null
         }
 

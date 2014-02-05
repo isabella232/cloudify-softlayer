@@ -54,12 +54,12 @@ service {
 			ServiceUtils.isPortOccupied(nameNodePort)
         }
 		
-		locator {	
+		/*locator {	
 			def sigarQuery = "State.Name.eq=java,Args.*.ew=${nameNodeJmxPort}"
 			println "biginsights-qs-service(locator): Sigar query is ${sigarQuery}"
 			def myPids = ServiceUtils.ProcessUtils.getPidsWithQuery(sigarQuery)			
 			println "biginsights-qs-service(locator): Current PIDs are ${myPids}"
 			return myPids
-        }
+        } */
     }
 }

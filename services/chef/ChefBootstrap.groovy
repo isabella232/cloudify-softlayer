@@ -148,16 +148,22 @@ Chef::Log::Formatter.show_time = true
         }
     }
     public def runClient(ArrayList runList) {
+        println "In runClient #1 ..."
         runClient(runListToInitialJson(runList))
+        println "End of runClient #1 ..."
     }
     public def runClient(HashMap initJson=[:]) {
+        println "In runClient #2 ..."
         configureClient()
+        println "In runClient #2 after configureClient..."
         initJson["cloudify"] = context.attributes.thisService["chef"]
         def jsonFile = new File(pathJoin(context.getServiceDirectory(), "chef_client.json"))
+        println "In runClient #2 after jsonFile..."
         jsonFile.withWriter() { it.write(JsonOutput.toJson(initJson)) }
         println "In ChefBootstrap.runClient(): b4 chef-client -l debug -j ${jsonFile.getPath()} ..."
         sudo("chef-client -l debug -j ${jsonFile.getPath()}")		
         //sudo("chef-client -j ${jsonFile.getPath()}")
+        println "End of runClient #2 ..."
     }
     public def runApply(String inlineRecipe) {
         if (chefConfig.version.tokenize('.')[0].toInteger() < 11 ) {

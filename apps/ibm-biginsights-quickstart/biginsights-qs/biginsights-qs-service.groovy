@@ -21,16 +21,15 @@ service {
     numInstances 1
 
     compute {
-        //template "LARGE_RH"
-        template "MEDIUM_UBUNTU"
+        template "LARGE_RH"
     }
 
     lifecycle {
 		
 		details {
 			def currPublicIP = context.publicAddress
-			def biginsightsURL = "https://${currPublicIP}:${httpPort}"
-			def biginsightsDfsHealthURL = "https://${currPublicIP}:${nameNodePort}"
+			def biginsightsURL = "https://${currPublicIP}:${httpsPort}"
+			def biginsightsDfsHealthURL = "http://${currPublicIP}:${nameNodePort}"
 			def biginsightsUser = "biadmin"
 			def biginsightsPass = "biadmin"
 			
@@ -50,10 +49,10 @@ service {
 		}
 	
 	
-        startDetectionTimeoutSecs 1240
+        startDetectionTimeoutSecs 3600
         startDetection {
-			println "startDetection checking port ${nameNodePort}..."+ServiceUtils.isPortOccupied(nameNodePort)
-			ServiceUtils.isPortOccupied(nameNodePort)
+			println "startDetection checking https port ${httpsPort}..."+ServiceUtils.isPortOccupied(httpsPort)
+			ServiceUtils.isPortOccupied(httpsPort)
         }
 		
     }

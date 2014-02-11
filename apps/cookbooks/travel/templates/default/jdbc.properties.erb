@@ -13,17 +13,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 *******************************************************************************/
-chefRepo = [
-  "repo_type": "git",
-  "url": "https://github.com/CloudifySource/cloudify-softlayer.git",
-  "inner_path": "apps"
-]
-
-
-
-chefServerVersion = "11.0.8-1"
-
-//This can be enabled when the hostname returned by the chef-server is externally routable (e.g. in AWS machines), and will allow use of the chef server outside the current deployment.
-//If left unset, the chef-server will be configured to use its internal ip, and will only be accessible by instances in its local availability zone.
-externallyRoutableHostname = false
-
+jdbc.driverClassName=com.mysql.jdbc.Driver
+jdbc.url=jdbc:mysql://<%= @mysql_host %>:3306/travel
+jdbc.username=<%= @mysql_user %>
+jdbc.password=<%= @mysql_password %>
